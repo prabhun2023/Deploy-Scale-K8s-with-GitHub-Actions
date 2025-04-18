@@ -1,0 +1,24 @@
+name: Deploy to Kubernetes
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: self-hosted
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up kubeconfig from secret
+        run: |
+          echo "${{ secrets.KUBECONFIG }}" | base64 -d > $HOME/.kube/config
+          chmod 600 $HOME/.kube/config
+
+      - name: Show cluster info
+        run: |
+          kubectl config get-contexts
+          kubectl get nodes
