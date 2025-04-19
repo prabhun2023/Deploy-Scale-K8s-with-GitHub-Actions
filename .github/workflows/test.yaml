@@ -13,15 +13,21 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: get kubeconfig
+      - name: Decode kubeconfig from base64
         run: |
-          echo "${{ secrets.KUBECONFIG }}" | base64 -d > ${{ github.workspace }}/kubeconfig
+          echo "${{ secrets.KUBECONFIG }}" | base64 -d > $GITHUB_WORKSPACE/kubeconfig
+
+      - name: Debug kubeconfig output
+        run: |
+          cat ${{ github.workspace }}/kubeconfig
 
       - name: Set Kubernetes Context
         uses: azure/k8s-set-context@v1
         with:
           method: kubeconfig
           kubeconfig: ${{ github.workspace }}/kubeconfig
+
       - name: Verify cluster access
         run: |
+          export KUBECONFIG=${{ github.workspace }}/kubeconfig
           kubectl get nodes
