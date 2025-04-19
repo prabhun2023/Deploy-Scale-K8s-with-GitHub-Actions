@@ -5,10 +5,11 @@ metadata:
   namespace: default
 spec:
   scaleTargetRef:
+    apiVersion: apps/v1
     name: nginx
   minReplicaCount: 1
   maxReplicaCount: 10
-  cooldownPeriod:  30   # Optional: how long to wait before scaling down
+  cooldownPeriod:  10   # Optional: how long to wait before scaling down
   pollingInterval: 20   # Optional: check every 30 seconds
   triggers:
   - type: prometheus
@@ -16,8 +17,5 @@ spec:
       serverAddress: http://prometheus-server.default.svc.cluster.local:80
       metricName: nginx_cpu_usage_percentage
       query: |
-        sum(rate(container_cpu_usage_seconds_total{namespace="default", pod=~"nginx-.*"}[3m]))
-        /
-        count(rate(container_cpu_usage_seconds_total{namespace="default", pod=~"nginx-.*"}[3m]))
-        * 100
-      threshold: "2.0"
+        sum(rate(container_cpu_usage_seconds_total{namespace="default", pod=~"nginx-.*"}[3m])) / count(rate(container_cpu_usage_seconds_total{namespace="default", pod=~"nginx-.*"}[3m])) * 1000
+      threshold: "20.0"
