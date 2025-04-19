@@ -16,7 +16,7 @@ jobs:
       - name: Setup kubeconfig
         if: success()
         run: |
-          echo "${{ secrets.KUBECONFIG }}" | base64 -d > $GITHUB_WORKSPACE/kubeconfig
+          echo "${{ secrets.KUBECONFIG }}" | base64 -d > $GITHUB_WORKSPACE/test/kubeconfig
 
       - name: Show cluster info
         if: success()
