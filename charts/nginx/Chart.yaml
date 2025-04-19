@@ -1,0 +1,4 @@
+apiVersion: v2
+name: nginx
+description: A Helm chart for deploying nginx
+version: 1.0
