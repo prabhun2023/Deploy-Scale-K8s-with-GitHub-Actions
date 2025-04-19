@@ -63,7 +63,7 @@ jobs:
         env:
           KUBECONFIG: ${{ github.workspace }}/kubeconfig
 
-      - name: Verify Keda deployment
+      - name: Verify nginx deployment
         if: success()
         run: |
           sleep 30
