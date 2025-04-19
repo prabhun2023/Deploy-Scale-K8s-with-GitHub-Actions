@@ -12,12 +12,13 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
-      
+
       - name: Set Kubernetes Context
         uses: azure/k8s-set-context@v1
-          with:
-            method: kubeconfig
-            kubeconfig: ${{ secrets.KUBE_CONFIG }} # Use secret (https://developer.github.com/actions/managing-workflows/storing-secrets/)
+        with:
+          method: kubeconfig
+          kubeconfig: ${{ secrets.KUBECONFIG }}
+
+      - name: Verify cluster access
         run: |
           kubectl get nodes
-
