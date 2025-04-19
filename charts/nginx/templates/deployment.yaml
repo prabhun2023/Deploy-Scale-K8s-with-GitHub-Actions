@@ -4,21 +4,23 @@ metadata:
   name: nginx
   labels:
     app: nginx
-  annotations:
-    prometheus.io/scrape: "true"  # Tells Prometheus to scrape metrics
-    prometheus.io/port: "80"    # Port on which Nexus exposes metrics
 spec:
-  replicas: 1
+  replicas: {{ .Values.replicaCount }}
   selector:
     matchLabels:
-      app: nexus
+      app: nginx
   template:
     metadata:
       labels:
         app: nginx
+      annotations:
+        prometheus.io/scrape: "true"
+        prometheus.io/port: "80"
     spec:
       containers:
         - name: nginx
-          image: nginx:latest
+          image: nginx:stable
           ports:
-            - containerPort: 80  # Expose Prometheus metrics on this port
+            - containerPort: 80
+          resources:
+            {{- toYaml .Values.nginx.resources | nindent 12 }}
