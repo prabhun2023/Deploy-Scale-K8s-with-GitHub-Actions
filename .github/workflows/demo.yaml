@@ -12,10 +12,11 @@ jobs:
       - name: install kubectl
         uses: azure/setup-kubectl@v4
         with:
-           version: '1.32.0'
+           version: 'v1.32.0'
         id: install
             
   deploy:
+    needs: pre-requisites
     runs-on: self-hosted
 
     steps:
