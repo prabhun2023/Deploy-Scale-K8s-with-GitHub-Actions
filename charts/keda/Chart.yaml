@@ -1,0 +1,10 @@
+apiVersion: v2
+name: keda
+description: A Helm chart for deploying KEDA autoscaling
+version: 2.14.2
+
+dependencies:
+  - name: keda
+    version: "2.14.2" # or latest version from KEDA Helm repo
+    repository: "https://kedacore.github.io/charts"
+
