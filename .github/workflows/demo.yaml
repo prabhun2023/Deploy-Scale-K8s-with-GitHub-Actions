@@ -17,10 +17,11 @@ jobs:
         if: success()
         run: |
           echo "${{ secrets.KUBECONFIG }}" | base64 -d > $GITHUB_WORKSPACE/kubeconfig
-          export KUBECONFIG=${{ github.workspace }}/kubeconfig
 
       - name: Show cluster info
         if: success()
         run: |
           kubectl config get-contexts
           kubectl get nodes
+        env:
+          KUBECONFIG: ${{ github.workspace }}/kubeconfig
