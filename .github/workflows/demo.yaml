@@ -13,9 +13,14 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: Show cluster info
+      - name: Setup kubeconfig
+        if: success()
         run: |
           echo "${{ secrets.KUBECONFIG }}" | base64 -d > $GITHUB_WORKSPACE/kubeconfig
           export KUBECONFIG=${{ github.workspace }}/kubeconfig
+
+      - name: Show cluster info
+        if: success()
+        run: |
           kubectl config get-contexts
           kubectl get nodes
