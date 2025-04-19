@@ -48,8 +48,26 @@ jobs:
           KUBECONFIG: ${{ github.workspace }}/kubeconfig
 
       - name: Verify Keda deployment
-        run: kubectl get all -n keda
+        if: success()
+        run: |
+          sleep 30
+          kubectl get all -n keda
         env:
           KUBECONFIG: ${{ github.workspace }}/kubeconfig
-        
+
+      - name: Deploy nginx 
+        if: success()
+        run: |
+          helm upgrade --install nginx ./charts/nginx \
+            --namespace default
+        env:
+          KUBECONFIG: ${{ github.workspace }}/kubeconfig
+
+      - name: Verify Keda deployment
+        if: success()
+        run: |
+          sleep 30
+          kubectl get all | grep nginx
+        env:
+          KUBECONFIG: ${{ github.workspace }}/kubeconfig
           
