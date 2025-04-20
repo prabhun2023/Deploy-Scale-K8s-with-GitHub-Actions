@@ -1,4 +1,4 @@
-name: Deploy to Kubernetes
+name: Manual K8s Deployment
 
 on:
   workflow_dispatch:
