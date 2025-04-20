@@ -1,3 +1,4 @@
+namespace: ns-apps
 replicaCount: 1
 nginx:
   resources:

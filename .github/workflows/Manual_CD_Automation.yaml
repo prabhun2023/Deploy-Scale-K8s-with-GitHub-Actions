@@ -1,9 +1,12 @@
-name: Deploy to Kubernetes
+name: Manual K8s Deployment
 
 on:
-  push:
-    branches:
-      - main
+  workflow_dispatch:
+    inputs:
+      chart_name:
+        description: "Chart name to deploy"
+        required: true
+        default: "nginx"
 
 jobs:            
   deploy:
@@ -55,19 +58,18 @@ jobs:
         env:
           KUBECONFIG: ${{ github.workspace }}/kubeconfig
 
-      - name: Deploy nginx 
+      - name: Deploy ${{ github.event.inputs.chart_name }}
         if: success()
         run: |
-          helm upgrade --install nginx ./charts/nginx \
-            --namespace default
+          helm upgrade --install ${{ github.event.inputs.chart_name }} ./charts/${{ github.event.inputs.chart_name }}
         env:
           KUBECONFIG: ${{ github.workspace }}/kubeconfig
 
-      - name: Verify nginx deployment
+      - name: Verify ${{ github.event.inputs.chart_name }} deployment
         if: success()
         run: |
           sleep 30
-          kubectl get all | grep nginx
+          kubectl get all | grep ${{ github.event.inputs.chart_name }}
         env:
           KUBECONFIG: ${{ github.workspace }}/kubeconfig
           

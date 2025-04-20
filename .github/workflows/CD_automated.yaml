@@ -1,0 +1,98 @@
+name: Automatic Continuous Deployment 
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'charts/**'   # Any file under charts/
+
+jobs:
+  deploy:
+    runs-on: self-hosted
+
+    steps:
+      - name: install kubectl
+        uses: azure/setup-kubectl@v4
+        with:
+           version: 'v1.32.0'
+        id: install-kubectl
+
+      - name: install helm
+        uses: azure/setup-helm@v4.3.0
+        with:
+           version: 'v3.16.4' # default is latest (stable)
+        id: install-helm
+
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Setup kubeconfig
+        if: success()
+        run: |
+          echo "${{ secrets.KUBECONFIG }}" | base64 -d > $GITHUB_WORKSPACE/kubeconfig
+
+      - name: Show cluster info
+        if: success()
+        run: |
+          kubectl config get-contexts
+          kubectl get nodes
+        env:
+          KUBECONFIG: ${{ github.workspace }}/kubeconfig
+
+      - name: Deploy KEDA with Helm
+        if: success()
+        run: |
+          helm dependency update ./charts/keda
+          helm upgrade --install keda ./charts/keda \
+            --namespace keda --create-namespace
+        env:
+          KUBECONFIG: ${{ github.workspace }}/kubeconfig
+
+      - name: Verify Keda deployment
+        if: success()
+        run: |
+          sleep 30
+          kubectl get all -n keda
+        env:
+          KUBECONFIG: ${{ github.workspace }}/kubeconfig
+
+      - name: Deploy All charts 
+        if: success()
+        run: |
+          charts=()
+          for dir in ./charts/*/; do
+            chart=$(basename "$dir")
+            if [[ "$chart" != "keda" ]]; then
+              charts+=("$chart")
+            fi
+          done
+          
+          # Deploy each chart using helm
+          for chart in "${charts[@]}"; do
+            echo "Deploying chart: $chart"
+            helm upgrade --install "$chart" "./charts/$chart"
+          done
+        env:
+          KUBECONFIG: ${{ github.workspace }}/kubeconfig
+
+      - name: Verify deployments
+        if: success()
+        run: |
+          sleep 30
+          charts=()
+          for dir in ./charts/*/; do
+            chart=$(basename "$dir")
+            if [[ "$chart" != "keda" ]]; then
+              charts+=("$chart")
+            fi
+          done
+          
+          # Deploy each chart using helm
+          for chart in "${charts[@]}"; do
+            echo "Verifing Deployment: $chart"
+            kubectl get all -A | grep $chart
+          done
+        env:
+          KUBECONFIG: ${{ github.workspace }}/kubeconfig
+          
