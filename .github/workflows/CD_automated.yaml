@@ -89,7 +89,6 @@ jobs:
             fi
           done
           
-          # Deploy each chart using helm
           for chart in "${charts[@]}"; do
             echo "Verifing Deployment: $chart"
             kubectl get all -A | grep $chart
