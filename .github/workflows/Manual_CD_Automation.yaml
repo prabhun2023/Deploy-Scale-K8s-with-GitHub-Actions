@@ -7,6 +7,10 @@ on:
         description: "Chart name to deploy"
         required: true
         default: "nginx"
+      namespace:
+        description: "Enter Namespace"
+        required: true
+        default: "default"
 
 jobs:            
   deploy:
@@ -41,27 +45,10 @@ jobs:
         env:
           KUBECONFIG: ${{ github.workspace }}/kubeconfig
 
-      - name: Deploy KEDA with Helm
-        if: success()
-        run: |
-          helm dependency update ./charts/keda
-          helm upgrade --install keda ./charts/keda \
-            --namespace keda --create-namespace
-        env:
-          KUBECONFIG: ${{ github.workspace }}/kubeconfig
-
-      - name: Verify Keda deployment
-        if: success()
-        run: |
-          sleep 30
-          kubectl get all -n keda
-        env:
-          KUBECONFIG: ${{ github.workspace }}/kubeconfig
-
       - name: Deploy ${{ github.event.inputs.chart_name }}
         if: success()
         run: |
-          helm upgrade --install ${{ github.event.inputs.chart_name }} ./charts/${{ github.event.inputs.chart_name }}
+          helm upgrade --install ${{ github.event.inputs.chart_name }} ./charts/${{ github.event.inputs.chart_name }} --namespace ${{ github.event.inputs.namespace }} --create-namespace
         env:
           KUBECONFIG: ${{ github.workspace }}/kubeconfig
 
