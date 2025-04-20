@@ -70,8 +70,9 @@ jobs:
           
           # Deploy each chart using helm
           for chart in "${charts[@]}"; do
+            namespace=$(cat charts/$chart/values.yaml | grep namespace | awk '{ print $2}')
             echo "Deploying chart: $chart"
-            helm upgrade --install "$chart" "./charts/$chart"
+            helm upgrade --install "$chart" "./charts/$chart" --namespace $namespace --create-namespace
           done
         env:
           KUBECONFIG: ${{ github.workspace }}/kubeconfig
