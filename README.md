@@ -4,7 +4,7 @@
 This project demonstrates a modular and automated approach for **Continuous Deployment (CD)** to a Kubernetes cluster using **GitHub Actions**, along with **KEDA** for event-driven autoscaling.
 
 It includes:
-- GitHub Actions-based CI/CD pipelines
+- GitHub Actions-based CD pipelines
 - Helm charts for KEDA and demo applications
 - Load testing and autoscaling via Prometheus metrics
 
