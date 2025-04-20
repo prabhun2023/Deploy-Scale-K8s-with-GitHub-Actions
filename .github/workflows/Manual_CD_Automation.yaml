@@ -56,7 +56,7 @@ jobs:
         if: success()
         run: |
           sleep 30
-          kubectl get all | grep ${{ github.event.inputs.chart_name }}
+          kubectl get all -A | grep ${{ github.event.inputs.chart_name }}
         env:
           KUBECONFIG: ${{ github.workspace }}/kubeconfig
           
