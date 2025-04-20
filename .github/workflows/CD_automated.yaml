@@ -55,19 +55,42 @@ jobs:
         env:
           KUBECONFIG: ${{ github.workspace }}/kubeconfig
 
-      - name: Deploy nginx 
+      - name: Deploy All charts 
         if: success()
         run: |
-          helm upgrade --install nginx ./charts/nginx \
-            --namespace default
+          charts=()
+          for dir in ./charts/*/; do
+            chart=$(basename "$dir")
+            if [[ "$chart" != "keda" ]]; then
+              charts+=("$chart")
+            fi
+          done
+          
+          # Deploy each chart using helm
+          for chart in "${charts[@]}"; do
+            echo "Deploying chart: $chart"
+            helm upgrade --install "$chart" "./charts/$chart"
+          done
         env:
           KUBECONFIG: ${{ github.workspace }}/kubeconfig
 
-      - name: Verify nginx deployment
+      - name: Verify deployments
         if: success()
         run: |
           sleep 30
-          kubectl get all | grep nginx
+          charts=()
+          for dir in ./charts/*/; do
+            chart=$(basename "$dir")
+            if [[ "$chart" != "keda" ]]; then
+              charts+=("$chart")
+            fi
+          done
+          
+          # Deploy each chart using helm
+          for chart in "${charts[@]}"; do
+            echo "Verifing Deployment: $chart"
+            kubectl get all -A | grep $chart
+          done
         env:
           KUBECONFIG: ${{ github.workspace }}/kubeconfig
           
