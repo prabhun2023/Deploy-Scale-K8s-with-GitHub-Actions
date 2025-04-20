@@ -8,7 +8,7 @@ It includes:
 - Helm charts for KEDA and demo applications
 - Load testing and autoscaling via Prometheus metrics
 
-For detailed documentation, please refer to this comprehensive guide: 📄 Full Documentation on Notion
+For detailed documentation, please refer to this comprehensive guide: 📄 [Full Documentation on Notion](https://deep-chestnut-efb.notion.site/GitHub-Actions-Based-Continuous-Deployment-with-Kubernetes-and-KEDA-1db74fee637e808abe7ddf6b50876ca2)
 
 ---
 
