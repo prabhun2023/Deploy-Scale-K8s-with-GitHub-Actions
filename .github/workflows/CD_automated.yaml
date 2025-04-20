@@ -1,11 +1,13 @@
-name: Deploy to Kubernetes
+name: Automatic Continuous Deployment 
 
 on:
   push:
     branches:
       - main
+    paths:
+      - 'charts/**'   # Any file under charts/
 
-jobs:            
+jobs:
   deploy:
     runs-on: self-hosted
 
