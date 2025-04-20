@@ -17,5 +17,5 @@ spec:
       serverAddress: http://prometheus-server.default.svc.cluster.local:80
       metricName: nginx_cpu_usage_percentage
       query: |
-        sum(rate(container_cpu_usage_seconds_total{namespace="ns-apps", pod=~"nginx-.*"}[3m])) / count(rate(container_cpu_usage_seconds_total{namespace="ns-apps", pod=~"nginx-.*"}[3m])) * 1000
-      threshold: "20.0"
+        sum(rate(container_cpu_usage_seconds_total{namespace="ns-apps", pod=~"nginx-.*"}[3m])) / count(rate(container_cpu_usage_seconds_total{namespace="ns-apps", pod=~"nginx-.*"}[3m])) * 100
+      threshold: "2.0"
