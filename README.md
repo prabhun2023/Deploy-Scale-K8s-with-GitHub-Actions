@@ -8,6 +8,8 @@ It includes:
 - Helm charts for KEDA and demo applications
 - Load testing and autoscaling via Prometheus metrics
 
+For detailed documentation, please refer to this comprehensive guide: 📄 Full Documentation on Notion
+
 ---
 
 ## 🔧 Host Environment
