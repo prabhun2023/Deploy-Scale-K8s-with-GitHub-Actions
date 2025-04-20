@@ -1,4 +1,4 @@
-name: Manual K8s Deployment
+name: Manual Single Chart Deployment
 
 on:
   workflow_dispatch:
