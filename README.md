@@ -193,4 +193,3 @@ This project showcases a powerful combination of:
 - Helm for templated, reusable deployments
 
 All configured to enable scalable, modular, and reproducible deployments.
-
