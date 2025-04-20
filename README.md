@@ -184,11 +184,6 @@ sum(rate(container_cpu_usage_seconds_total{namespace="ns-apps", pod=~"nginx-.*"}
 
 ---
 
-## 📊 Prometheus Dashboard
-[Open Dashboard](http://localhost:9090/query)
-
----
-
 ## ✅ Summary
 This project showcases a powerful combination of:
 - GitHub Actions for CI/CD
